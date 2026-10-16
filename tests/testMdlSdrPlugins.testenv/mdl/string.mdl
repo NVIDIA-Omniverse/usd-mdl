@@ -1,0 +1,12 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+export string test_string
+(
+    string param = "aStringValue"
+)
+{
+    return param;
+}

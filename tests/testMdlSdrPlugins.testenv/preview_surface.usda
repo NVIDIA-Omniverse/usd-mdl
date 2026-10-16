@@ -1,0 +1,89 @@
+#usda 1.0
+# SPDX-License-Identifier: Apache-2.0
+
+# These identifiers are private to the test, avoiding application registry IDs.
+def Shader "FixturePreviewUv"
+{
+    uniform token info:id = "UsdMdlFixturePreviewUv"
+    uniform token info:implementationSource = "sourceAsset"
+    uniform asset info:mdl:sourceAsset = @./mdl/preview_surface.mdl@
+    uniform token info:mdl:sourceAsset:subIdentifier = "PreviewUv(int)"
+    int inputs:channel (
+        connectability = "interfaceOnly"
+    )
+    float2 outputs:result (
+        sdrMetadata = { string implementationName = "out" }
+    )
+}
+
+def Shader "FixturePreviewTransform2d"
+{
+    uniform token info:id = "UsdMdlFixturePreviewTransform2d"
+    uniform token info:implementationSource = "sourceAsset"
+    uniform asset info:mdl:sourceAsset = @./mdl/preview_surface.mdl@
+    uniform token info:mdl:sourceAsset:subIdentifier = "PreviewTransform2d(float2,float,float2,float2)"
+    float2 inputs:in (
+        sdrMetadata = { string implementationName = "st" }
+    )
+    float inputs:rotation
+    float2 inputs:scale
+    float2 inputs:translation
+    float2 outputs:result (
+        sdrMetadata = { string implementationName = "out" }
+    )
+}
+
+def Shader "FixturePreviewTexture"
+{
+    uniform token info:id = "UsdMdlFixturePreviewTexture"
+    uniform token info:implementationSource = "sourceAsset"
+    uniform asset info:mdl:sourceAsset = @./mdl/preview_surface.mdl@
+    uniform token info:mdl:sourceAsset:subIdentifier = "PreviewTexture(texture_2d,float2,WrapMode,WrapMode,float4,string)"
+    asset inputs:file (
+        sdrMetadata = { string __SDR__colorspace = "sourceColorSpace" }
+    )
+    float2 inputs:st
+    token inputs:wrapS (
+        connectability = "interfaceOnly"
+    )
+    token inputs:wrapT (
+        connectability = "interfaceOnly"
+    )
+    float4 inputs:fallback
+    token inputs:sourceColorSpace (
+        connectability = "interfaceOnly"
+    )
+    float outputs:r
+    float outputs:g
+    float outputs:b
+    float outputs:a
+    color3f outputs:rgb
+}
+
+def Shader "FixturePreviewSurface"
+{
+    uniform token info:id = "UsdMdlFixturePreviewSurface"
+    uniform token info:implementationSource = "sourceAsset"
+    uniform asset info:mdl:sourceAsset = @./mdl/preview_surface.mdl@
+    uniform token info:mdl:sourceAsset:subIdentifier = "PreviewSurface"
+    color3f inputs:diffuseColor
+    color3f inputs:emissiveColor
+    normal3f inputs:normal
+    float inputs:opacity
+    float inputs:displacement
+    token inputs:opacityMode (
+        connectability = "interfaceOnly"
+    )
+    token outputs:surface (
+        sdrMetadata = {
+            string implementationName = "out"
+            string renderType = "terminal surface"
+        }
+    )
+    token outputs:displacement (
+        sdrMetadata = {
+            string implementationName = "out"
+            string renderType = "terminal displacement"
+        }
+    )
+}

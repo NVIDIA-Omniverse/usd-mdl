@@ -1,0 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+export color create_layer(color value = color(0.75), float alpha = 0.8) {
+    return value * alpha;
+}
+export material paint(float other_weight = 0.8) = material(ior: color(other_weight));

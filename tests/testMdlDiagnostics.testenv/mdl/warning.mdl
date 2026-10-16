@@ -1,0 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+import ::anno::*;
+float legacy(float value) [[ anno::deprecated("diagnostic warning") ]] { return value; }
+export float entry(float value = 0.5) { return legacy(value); }

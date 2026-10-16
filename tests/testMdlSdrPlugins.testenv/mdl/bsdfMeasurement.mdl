@@ -1,0 +1,16 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::df::*;
+
+export material test_bsdfMeasurement
+(
+    uniform bsdf_measurement param = bsdf_measurement("./resources/one.mbsdf")
+) =
+material(
+    surface: material_surface(
+        scattering: df::measured_bsdf(measurement: param)
+    )
+);

@@ -1,0 +1,96 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// Fixtures for testMdlSubIdentifier.  Each function name is chosen to
+// exercise one branch of `Utils::ComputeMdlSubIdentifier`:
+//
+//   - `simple_*`        : non-overloaded function -> sub-id is the
+//                         simple name (no parens).
+//   - `over_*`          : overloaded; sub-id includes parameter
+//                         signature.  Parameter type names from this
+//                         module render unqualified (`Local`); types
+//                         from in-search-path modules (`::base::*`,
+//                         `::tex::*`) keep their `::module::` prefix.
+//
+// Worked subIdentifier expectations (verified by testMdlSubIdentifier):
+//
+//   simple_int                           -> "simple_int"
+//   simple_struct                        -> "simple_struct"
+//   simple_material                      -> "simple_material"
+//   over_id(int)                         -> "over_id(int)"
+//   over_id(int,int)                     -> "over_id(int,int)"
+//   over_id(::sub_identifier::Local)     -> "over_id(Local)"
+//   over_id(::tex::wrap_mode)            -> "over_id(::tex::wrap_mode)"
+//   over_array(int[3])                   -> "over_array(int[3])"
+//   over_array(float[<N>])               -> "over_array(float[N])"
+//   over_vec(float3)                     -> "over_vec(float3)"
+//   over_vec(float3,float3)              -> "over_vec(float3,float3)"
+
+mdl 1.8;
+
+import ::tex::*;
+
+export struct Local
+{
+    int i = 0;
+    float f = 0.0;
+};
+
+// Each function body uses every parameter, so the MDL compiler sees
+// them as referenced (no C183 warnings).  Bodies are minimal - the
+// fixture exists only so testMdlSubIdentifier can sweep Sdr
+// discovery and verify the subIdentifier strings.
+
+// Simple (non-overloaded) cases ----------------------------------------------
+
+export int simple_int(int x = 1) { return x; }
+
+export Local simple_struct(int i = 0)
+{
+    Local l;
+    l.i = i;
+    return l;
+}
+
+export material simple_material() = material();
+
+// Overload set: int variants -------------------------------------------------
+
+export int over_id(int x = 1) { return x; }
+
+export int over_id(int x = 1, int y = 2) { return x + y; }
+
+// Overload set: same-module struct -------------------------------------------
+
+export int over_id(Local s = Local()) { return s.i; }
+
+// Overload set: cross-module enum (::tex::wrap_mode) -------------------------
+
+export int over_id(::tex::wrap_mode m = ::tex::wrap_clamp)
+{
+    return int(m);
+}
+
+// Overload set: array parameters ---------------------------------------------
+
+export int over_array(int[3] a = int[](1, 2, 3))
+{
+    return a[0];
+}
+
+export float over_array(float[<N>] a = float[](0.0))
+{
+    return a[0];
+}
+
+// Overload set: vector parameters --------------------------------------------
+
+export float over_vec(float3 v = float3(0.0))
+{
+    return v.x;
+}
+
+export float over_vec(float3 a = float3(0.0), float3 b = float3(0.0))
+{
+    return a.x + b.x;
+}

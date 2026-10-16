@@ -1,0 +1,86 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+import ::anno::*;
+import ::sdr_metadata_other::*;
+
+annotation SDR__label(string value);
+annotation SDR__label(float number);
+annotation SDR__label(int first, int second);
+annotation SDR__connectable(bool enabled);
+annotation SDR__connectable(int value);
+
+// One healthy definition proves module loading succeeds despite rejected nodes.
+export float valid_metadata_control(float value = 0.5 [[ SDR__label("Control") ]])
+{
+    return value;
+}
+
+export int property_conflict_local_first(int value = 1 [[
+    SDR__label("Local property"), sdr_metadata_other::SDR__label("Other property"),
+    anno::display_name("SDK fallback")
+]]) { return value; }
+
+export int property_conflict_other_first(int value = 1 [[
+    sdr_metadata_other::SDR__label("Other property"), SDR__label("Local property")
+]]) { return value; }
+
+export int node_conflict_local_first(int value = 1)
+[[ SDR__label("Local node"), sdr_metadata_other::SDR__label("Other node") ]]
+{ return value; }
+
+export int node_conflict_other_first(int value = 1)
+[[ sdr_metadata_other::SDR__label("Other node"), SDR__label("Local node") ]]
+{ return value; }
+
+export int [[
+    SDR__label("Local output"), sdr_metadata_other::SDR__label("Other output")
+]] output_conflict_local_first(int value = 1) { return value; }
+
+export int [[
+    sdr_metadata_other::SDR__label("Other output"), SDR__label("Local output")
+]] output_conflict_other_first(int value = 1) { return value; }
+
+export int connectable_conflict_local_first(int value = 1 [[
+    SDR__connectable(false), sdr_metadata_other::SDR__connectable(true)
+]]) { return value; }
+
+export int connectable_conflict_other_first(int value = 1 [[
+    sdr_metadata_other::SDR__connectable(true), SDR__connectable(false)
+]]) { return value; }
+
+// Conflicts must also be detected when qualified names and signatures repeat.
+export int property_conflict_repeated(int value = 1 [[
+    SDR__label("First property"), SDR__label("Second property")
+]]) { return value; }
+
+export int node_conflict_repeated(int value = 1)
+[[ SDR__label("First node"), SDR__label("Second node") ]]
+{ return value; }
+
+export int [[ SDR__label("First output"), SDR__label("Second output") ]]
+output_conflict_repeated(int value = 1) { return value; }
+
+export int property_conflict_overloaded(int value = 1 [[
+    SDR__label("First property"), SDR__label(4.25)
+]]) { return value; }
+
+export int node_conflict_overloaded(int value = 1)
+[[ SDR__label(2.5), SDR__label("Second node") ]]
+{ return value; }
+
+export int [[ SDR__label("First output"), SDR__label(8.5) ]]
+output_conflict_overloaded(int value = 1) { return value; }
+
+export int property_conflict_connectable_repeated(int value = 1 [[
+    SDR__connectable(false), SDR__connectable(true)
+]]) { return value; }
+
+export int property_conflict_connectable_overloaded(int value = 1 [[
+    SDR__connectable(false), SDR__connectable(1)
+]]) { return value; }
+
+// An ineligible multi-argument occurrence cannot erase earlier conflicts.
+export int property_conflict_before_ambiguous(int value = 1 [[
+    SDR__label("First property"), SDR__label("Second property"), SDR__label(10, 20)
+]]) { return value; }

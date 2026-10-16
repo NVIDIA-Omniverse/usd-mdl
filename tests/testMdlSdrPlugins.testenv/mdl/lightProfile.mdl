@@ -1,0 +1,19 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::df::*;
+
+export material test_lightProfile
+(
+    uniform light_profile param = light_profile("./resources/one.ies")
+) =
+material (
+    surface: material_surface (
+        emission:  material_emission (
+            emission: df::measured_edf(profile: param)
+        )
+    )
+);
+

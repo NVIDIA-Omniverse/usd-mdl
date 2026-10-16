@@ -1,0 +1,66 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::math::*;
+
+export struct SimpleStruct
+{
+    int i = 1;
+
+    float f = 0.2;
+};
+
+export int test_overload
+(
+    int a = 1,
+
+    int b = 2,
+)
+{
+    return a + b;
+}
+
+
+export int test_overload
+(
+    int a = 1,
+
+    int b = 2,
+
+    SimpleStruct s = SimpleStruct()
+)
+{
+    return a + b + s.i;
+}
+
+export float test_overload
+(
+    float a = 1,
+
+    float b = 2
+)
+{
+    return a + b;
+}
+
+export float test_overload
+(
+    int a = 1,
+
+    float b = 2
+)
+{
+    return a + b;
+}
+
+export float test_overload
+(
+    float a = 1,
+
+    int b = 2
+)
+{
+    return a + b;
+}

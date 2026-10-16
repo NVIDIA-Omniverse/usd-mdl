@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.7;
+
+import ::anno::*;
+
+export int legacy_scalar_occurrences(int value = 1 [[
+    anno::display_name("First property label"),
+    anno::display_name("Last property label"),
+    anno::description("First property help"),
+    anno::description("Last property help"),
+    anno::in_group("First"),
+    anno::in_group("Last", "Section"),
+    // The SDK suppresses a second range (C256), so only the first reaches us.
+    anno::soft_range(0, 10), anno::soft_range(2, 8),
+    anno::ui_order(3), anno::ui_order(5)
+]])
+[[
+    anno::display_name("First node label"), anno::display_name("Last node label"),
+    anno::description("First node help"), anno::description("Last node help")
+]] { return value; }

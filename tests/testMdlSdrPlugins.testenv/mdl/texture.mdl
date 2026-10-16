@@ -1,0 +1,81 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::state::*;
+import ::tex::*;
+
+export color test_texture2D
+(
+    uniform texture_2d param = texture_2d("./resources/one.png", ::tex::gamma_linear)
+)
+{
+    float3 tex_coord3 = state::texture_coordinate(0);
+    return tex::lookup_color(param, float2(tex_coord3.x, tex_coord3.y));
+}
+
+// texture_3d (.vdb) load is unsupported - the SDK ships no image
+// plugin for that format.  Empty constructor keeps the rest of
+// texture.mdl loadable; tests cover its empty default and declared type.
+export color test_texture3D
+(
+    uniform texture_3d param = texture_3d()
+)
+{
+    return tex::lookup_color(param, state::texture_coordinate(0));
+}
+
+export color test_textureCube
+(
+    uniform texture_cube param =  texture_cube("./resources/one.cube.png", ::tex::gamma_linear)
+)
+{
+    return tex::lookup_color(param, state::texture_coordinate(0));
+}
+
+// texture_ptex load is unsupported - the SDK ships no Ptex image
+// plugin.  Empty constructor keeps texture.mdl loadable;
+// tests cover its empty default and declared type.
+export color test_texturePtex
+(
+    uniform texture_ptex param = texture_ptex()
+)
+{
+    return tex::lookup_color(param);
+}
+
+// UDIM (Mari) tile-set texture - the <UDIM> marker is preserved
+// literally in the resolved asset path.
+export color test_texture2D_udim
+(
+    uniform texture_2d param = texture_2d("./resources/tile_<UDIM>.png", ::tex::gamma_linear)
+)
+{
+    float3 tex_coord3 = state::texture_coordinate(0);
+    return tex::lookup_color(param, float2(tex_coord3.x, tex_coord3.y));
+}
+
+// Animated (frame-sequence) texture - the #### marker stands in for
+// the frame index and is preserved literally in the resolved asset
+// path.
+export color test_texture2D_animated
+(
+    uniform texture_2d param = texture_2d("./resources/frame_<####>.png", ::tex::gamma_linear)
+)
+{
+    float3 tex_coord3 = state::texture_coordinate(0);
+    return tex::lookup_color(param, float2(tex_coord3.x, tex_coord3.y));
+}
+
+// Combined animated UDIM texture copied from the MDL SDK example resources.
+export color test_texture2D_animated_udim
+(
+    uniform texture_2d param = texture_2d(
+        "./resources/tiled_resource.<##>.<UDIM>.png", ::tex::gamma_linear)
+)
+{
+    float3 tex_coord3 = state::texture_coordinate(0);
+    return tex::lookup_color(
+        param, float2(tex_coord3.x, tex_coord3.y), frame: state::animation_time());
+}

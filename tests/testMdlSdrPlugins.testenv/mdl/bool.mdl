@@ -1,0 +1,12 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+export bool test_bool
+(
+    bool param = true
+)
+{
+    return param;
+}

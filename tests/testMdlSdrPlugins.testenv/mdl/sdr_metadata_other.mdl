@@ -1,0 +1,14 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+// A second qualified annotation name can map to the same standard Sdr field.
+export annotation SDR__label(string text);
+export annotation SDR__connectable(bool enabled);
+export annotation SDR__hints(string value);
+
+// Repeated raw annotations exercise full qualified names and signatures.
+export annotation note(string text);
+export annotation note(int index, string text);
+export annotation marker();

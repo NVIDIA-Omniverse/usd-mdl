@@ -1,0 +1,85 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.4;
+import ::anno::*;
+import ::math::*;
+import ::tex::*;
+
+// Each material body uses every parameter so the MDL compiler sees
+// them as referenced (no C183 warnings).  Predicate variables are
+// declared `uniform` so they can flow into `material.thin_walled`
+// (which expects `uniform bool`); the predicated float is threaded
+// into `ior`.  Bodies are minimal - the test fixture only validates
+// that `anno::enable_if` strings survive unchanged in Sdr hints.
+
+// Case 1: simple bool equality
+export material test_enable_if_bool_eq(
+    uniform bool enable_shadows = true,
+    float shadow_intensity = 0.5
+        [[ anno::enable_if("enable_shadows == true") ]]
+) = material(thin_walled: enable_shadows, ior: color(shadow_intensity));
+
+// Case 2: integer greater-than
+export material test_enable_if_int_gt(
+    uniform int num_layers = 1,
+    float layer2_weight = 0.0
+        [[ anno::enable_if("num_layers > 1") ]]
+) = material(thin_walled: num_layers > 0, ior: color(layer2_weight));
+
+// Case 3: negation
+export material test_enable_if_negation(
+    uniform bool is_locked = false,
+    float value = 1.0
+        [[ anno::enable_if("!is_locked") ]]
+) = material(thin_walled: is_locked, ior: color(value));
+
+// Case 4: compound AND
+export material test_enable_if_and(
+    uniform bool use_texture = true,
+    uniform int mode = 1,
+    float tex_scale = 1.0
+        [[ anno::enable_if("use_texture == true && mode > 0") ]]
+) = material(thin_walled: use_texture && mode > 0, ior: color(tex_scale));
+
+// Case 5: compound OR
+export material test_enable_if_or(
+    uniform bool override_a = false,
+    uniform bool override_b = false,
+    float shared_value = 0.0
+        [[ anno::enable_if("override_a == true || override_b == true") ]]
+) = material(thin_walled: override_a || override_b, ior: color(shared_value));
+
+// Case 6: not-equal
+export material test_enable_if_neq(
+    uniform int render_mode = 0,
+    float quality = 1.0
+        [[ anno::enable_if("render_mode != 0") ]]
+) = material(thin_walled: render_mode != 0, ior: color(quality));
+
+// Valid MDL expressions that must not be interpreted as USD expressions.
+export material test_enable_if_texture(
+    uniform texture_2d texture = texture_2d(),
+    float weight = 0.5
+        [[ anno::enable_if("::tex::texture_isvalid(texture)") ]]
+) = material(thin_walled: tex::texture_isvalid(texture), ior: color(weight));
+
+export material test_enable_if_math(
+    uniform color emissive_factor = color(0.0),
+    float weight = 0.5
+        [[ anno::enable_if("::math::average(emissive_factor)>0.0") ]]
+) = material(thin_walled: math::average(emissive_factor) > 0.0, ior: color(weight));
+
+export enum AlphaMode { opaque = 0, mask = 1 };
+export material test_enable_if_enum(
+    uniform AlphaMode alpha_mode = opaque,
+    float weight = 0.5
+        [[ anno::enable_if("alpha_mode==mask") ]]
+) = material(thin_walled: alpha_mode == mask, ior: color(weight));
+
+export material test_enable_if_whitespace(
+    uniform bool enabled = false,
+    uniform int count = 2,
+    float weight = 0.5
+        [[ anno::enable_if("  enabled  &&\n\t(count > 1)  ") ]]
+) = material(thin_walled: enabled && count > 1, ior: color(weight));

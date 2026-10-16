@@ -1,0 +1,16 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::tex::*;
+
+export using ::tex import wrap_mode;
+
+export wrap_mode test_enum
+(
+     wrap_mode param = ::tex::wrap_clip
+)
+{
+    return param;
+}

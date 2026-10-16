@@ -1,0 +1,35 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+export enum mode {
+    disabled = -7,
+    automatic = 10,
+    authored = 43
+};
+
+// Content-style defaults with exact binary fractions, an HDR color, sparse
+// enum codes, a precision-sensitive double, and non-symmetric matrices.
+export material content_defaults(
+    uniform bool enabled = true,
+    uniform bool3 channels = bool3(true, false, true),
+    uniform int identifier = 16777217,
+    uniform double precise = 0.12345678901234568d,
+    uniform double3 precise_vector = double3(
+        0.12345678901234568d, 0.23456789012345678d, 0.34567890123456789d),
+    uniform float2 uv_scale = float2(-0.25, 8.0),
+    uniform color emission = color(0.125, 0.5, 4.0),
+    uniform string label = "red #50% \"surface\"",
+    uniform mode selection = authored,
+    uniform float[2] weights = float[](0.25, 0.75),
+    uniform float[3] samples = float[](1.0, 2.0, 3.0),
+    uniform int[4] indices = int[](1, 2, 3, 4),
+    uniform float3x3 transform = float3x3(
+        float3(1.0, 2.0, 3.0), float3(4.0, 5.0, 6.0), float3(7.0, 8.0, 10.0)),
+    uniform double3x3 precise_transform = double3x3(
+        1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0)
+) = material();
+
+export material required_parameters(float amount, float2 uv_scale, uniform texture_2d image)
+    = material();

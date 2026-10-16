@@ -1,0 +1,100 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+export bool2 test_vector_bool2
+(
+    bool2 param = bool2(true, false)
+)
+{
+    return param;
+}
+
+export bool3 test_vector_bool3
+(
+    bool3 param = bool3(true, false, true)
+)
+{
+    return param;
+}
+
+export bool4 test_vector_bool4
+(
+    bool4 param = bool4(true, false, true, false)
+)
+{
+    return param;
+}
+
+export double2 test_vector_double2
+(
+    double2 param = double2(0.1, 0.2)
+)
+{
+    return param;
+}
+
+export double3 test_vector_double3
+(
+    double3 param = double3(0.1, 0.2, 0.3)
+)
+{
+    return param;
+}
+
+export double4 test_vector_double4
+(
+    double4 param = double4(0.1, 0.2, 0.3, 0.4)
+)
+{
+    return param;
+}
+
+export float2 test_vector_float2
+(
+    float2 param = float2(0.1, 0.2)
+)
+{
+    return param;
+}
+
+export float3 test_vector_float3
+(
+    float3 param = float3(0.1, 0.2, 0.3)
+)
+{
+    return param;
+}
+
+export float4 test_vector_float4
+(
+    float4 param = float4(0.1, 0.2, 0.3, 0.4)
+)
+{
+    return param;
+}
+
+export int2 test_vector_int2
+(
+    int2 param = int2(1, 2)
+)
+{
+    return param;
+}
+
+export int3 test_vector_int3
+(
+    int3 param = int3(1, 2, 3)
+)
+{
+    return param;
+}
+
+export int4 test_vector_int4
+(
+    int4 param = int4(1, 2, 3, 4)
+)
+{
+    return param;
+}

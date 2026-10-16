@@ -1,0 +1,69 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+import ::tex::*;
+import ::anno::*;
+import ::pkg::another::*;
+import ::other::types::*;
+
+export struct Local { int i = 7; float f = 0.5; };
+export struct Thing { int i = 23; };
+// Returning a struct does not make an ordinary overload a constructor.
+export Local make_local(int value = 17) { return Local(i: value); }
+export Local make_local(float value = 0.25) { return Local(f: value); }
+export enum Mode { first, second };
+
+export color create_layer(color value = color(0.25), float alpha = 0.5) {
+    return value * alpha;
+}
+export int read_local(Local local_value = Local()) { return local_value.i; }
+export int read_enum(Mode mode_value = first) { return int(mode_value); }
+export int read_sibling(pkg::another::Bar2 sibling_value = pkg::another::Bar2()) {
+    return sibling_value.i;
+}
+export int read_library(tex::wrap_mode library_value = tex::wrap_clamp) {
+    return int(library_value);
+}
+export int zero() { return 9; }
+export int pick() { return 0; }
+export int pick(int integer_value) { return integer_value; }
+export int pick(float float_value) { return int(float_value); }
+export int pick(Local local_value) { return local_value.i; }
+export int pick(Mode mode_value) { return int(mode_value); }
+export int pick(pkg::another::Bar2 sibling_value) { return sibling_value.i; }
+export int pick(tex::wrap_mode library_value) { return int(library_value); }
+export int collision(pkg::another::Thing from_a) { return from_a.i; }
+export int collision(other::types::Thing from_b) { return from_b.i; }
+export int external_only(pkg::another::Thing external_value) { return external_value.i; }
+export int external_local(other::types::Local external_value) { return external_value.i; }
+export int scoped(Local local_value) { return local_value.i; }
+export int scoped(other::types::Local external_value) { return external_value.i; }
+export int pick_thing(Thing local_value) { return local_value.i; }
+export int pick_thing(pkg::another::Thing from_a) { return from_a.i; }
+export int pick_thing(other::types::Thing from_b) { return from_b.i; }
+export int eligible(int visible) { return visible; }
+export int eligible(float hidden_value) [[anno::hidden()]] { return int(hidden_value); }
+int private_function(int value) { return value; }
+export int public_caller(int value) { return private_function(value); }
+export int arrays(int[3] a) { return a[0]; }
+export float arrays(float[<N>] a) { return a[0]; }
+export int local_array(Local[2] a) { return a[0].i; }
+export int sibling_array(pkg::another::Bar2[2] a) { return a[0].i; }
+export int sibling_array(pkg::another::Bar2[<N>] a) { return a[0].i; }
+export int enum_array(Mode[2] a) { return int(a[0]); }
+export float shapes(float3 v) { return v.x; }
+export float shapes(float2x3 m) { return m[0].x; }
+export int shapes(uniform texture_2d[2] images) { return tex::width(images[0]); }
+export int mixed(Local local_value, pkg::another::Bar2 sibling_value, float weight) {
+    return local_value.i + sibling_value.i + int(weight);
+}
+export material paint(color tint = color(0.5), float weight = 0.5) =
+    material(ior: tint * weight);
+export material paint_local(Local value = Local()) = material(ior: color(value.f));
+export material paint_sibling(pkg::another::Bar2 value = pkg::another::Bar2()) =
+    material(ior: color(float(value.i)));
+export material paint_enum(Mode value = first) = material(ior: color(float(int(value))));
+export material paint_resources(uniform texture_2d[2] images = texture_2d[2]()) = material();
+export material plain() = material();
+export material hidden_paint(float weight = 0.5) [[anno::hidden()]] = material();
+material private_paint(float weight = 0.5) = material();
+export material public_paint() = private_paint();

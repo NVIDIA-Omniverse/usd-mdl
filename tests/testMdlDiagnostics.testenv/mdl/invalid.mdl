@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+// Each candidate needs one implicit int-to-float conversion. The ambiguous
+// call produces an error with candidate declarations attached as notes.
+export float candidate(float first, int second) { return first; }
+export float candidate(int first, float second) { return second; }
+export float entry() { return candidate(1, 1); }

@@ -1,0 +1,76 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+import ::anno::*;
+import ::sdr_metadata_other::*;
+
+module [[
+    sdr_metadata_other::note("Module first"),
+    sdr_metadata_other::marker(),
+    sdr_metadata_other::note("Module second"),
+    sdr_metadata_other::SDR__label("Module label stays raw")
+]];
+
+export enum AnnotatedMode [[
+    sdr_metadata_other::note("Enum first"),
+    sdr_metadata_other::marker(),
+    sdr_metadata_other::note("Enum second")
+]] {
+    low = 2 [[
+        sdr_metadata_other::note("Low first"),
+        sdr_metadata_other::note("Low second"),
+        sdr_metadata_other::marker()
+    ]],
+    high = 17 [[ sdr_metadata_other::marker() ]]
+};
+
+export struct AnnotatedStruct [[
+    sdr_metadata_other::note("Struct first"),
+    sdr_metadata_other::marker(),
+    sdr_metadata_other::note("Struct second")
+]] {
+    int value = 1;
+};
+
+export int [[
+    sdr_metadata_other::note("Output first"),
+    sdr_metadata_other::marker(),
+    sdr_metadata_other::note("Output second")
+]] test_raw_occurrences(
+    int value = 1 [[
+        sdr_metadata_other::note("Input first"),
+        sdr_metadata_other::marker(),
+        sdr_metadata_other::note(7, "Input overload"),
+        sdr_metadata_other::note("Input second"),
+        anno::display_name("SDK label"),
+        sdr_metadata_other::SDR__label("Promoted label"),
+        sdr_metadata_other::SDR__label("Promoted label")
+    ]]
+)
+[[
+    sdr_metadata_other::note("Node first"),
+    sdr_metadata_other::marker(),
+    sdr_metadata_other::note("Node second"),
+    sdr_metadata_other::SDR__label("Node label"),
+    sdr_metadata_other::SDR__label("Node label")
+]] { return value; }
+
+export int test_nested_occurrences(
+    uniform AnnotatedMode mode = low,
+    AnnotatedStruct structure = AnnotatedStruct()
+) { return int(mode) + structure.value; }
+
+export int test_usage_occurrences(
+    int accumulated = 1 [[
+        anno::usage("texture"), anno::usage("coordinate"),
+        anno::usage("texture"), anno::usage("normal")
+    ]],
+    int direct_first = 2 [[
+        sdr_metadata_other::SDR__hints("explicit-first"),
+        anno::usage("fallback-first"), anno::usage("fallback-second")
+    ]],
+    int direct_last = 3 [[
+        anno::usage("fallback-first"), anno::usage("fallback-second"),
+        sdr_metadata_other::SDR__hints("explicit-last")
+    ]]
+) { return accumulated + direct_first + direct_last; }

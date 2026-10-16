@@ -1,0 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+import ::pkg::another::*;
+import ::other::types::*;
+export struct Local { int i = 31; };
+export int nested(Local own) { return own.i; }
+export int nested(pkg::another::Thing cousin) { return cousin.i; }
+export int nested(other::types::Thing distant) { return distant.i; }

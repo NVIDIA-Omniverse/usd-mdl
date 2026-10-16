@@ -1,0 +1,354 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::anno::*;
+import ::tex::*;
+import ::sdr_metadata_other::*;
+
+// Parameter names intentionally differ from the Sdr field names. Promotion
+// requires the SDR__ prefix and uses the single argument's value.
+annotation SDR__label(string value);
+annotation SDR__label(float number);
+annotation SDR__label(int first, int second);
+annotation SDR__help(string text);
+annotation SDR__page(string value);
+annotation SDR__widget(string value);
+annotation SDR__sdrUsdDefinitionType(string value);
+annotation SDR__renderType(string value);
+annotation SDR__role(string value);
+annotation SDR__role(int value);
+annotation SDR__role(bool value);
+annotation SDR__role(float value);
+annotation SDR__role(float3 value);
+annotation SDR__role(string[<N>] values);
+annotation SDR__role(int[<N>] values);
+annotation SDR__hints(string value);
+annotation SDR__category(string value);
+annotation SDR__departments(string[<N>] values);
+annotation SDR__pages(string[<N>] values);
+annotation SDR__openPages(string[<N>] values);
+annotation SDR__colorspace(string parameter);
+annotation SDR__connectable(bool enabled);
+annotation SDR__connectable(int value);
+annotation SDR__connectable();
+
+// Same basenames as standard annotations, but from this user module.
+annotation display_name(string name);
+annotation description(string description);
+annotation hidden();
+annotation enable_if(string condition);
+annotation Label(string value);
+annotation private_note(int count, string message);
+
+// Unprefixed fields and malformed opt-in names must remain raw metadata.
+annotation label(string value);
+annotation help(string text);
+annotation category(string value);
+annotation connectable(bool enabled);
+annotation sdrUsdDefinitionType(string value);
+annotation renderType(string value);
+annotation SDR__Label(string value);
+annotation sdr__label(string value);
+annotation SDR_label(string value);
+annotation SDR__notAField(string value);
+
+export int test_metadata_property(int param = 1 [[
+    SDR__label("Parameter label"),
+    SDR__help("Parameter help"),
+    SDR__page("Direct:Page"),
+    SDR__widget("slider"),
+    SDR__role("none")
+]])
+{
+    return param;
+}
+
+export int test_metadata_property_precedence(
+    int direct_first = 1 [[
+        SDR__label("Direct first"), SDR__help("Direct first help"),
+        SDR__page("Direct:First"), SDR__hints("direct-first"),
+        anno::display_name("Fallback first"),
+        anno::description("Fallback first help"),
+        anno::in_group("Fallback", "First"),
+        anno::usage("fallback-first")
+    ]],
+    int direct_last = 2 [[
+        anno::display_name("Fallback last"),
+        anno::description("Fallback last help"),
+        anno::in_group("Fallback", "Last"),
+        anno::usage("fallback-last"),
+        SDR__label("Direct last"), SDR__help("Direct last help"),
+        SDR__page("Direct:Last"), SDR__hints("direct-last")
+    ]],
+    int empty_label = 3 [[
+        anno::display_name("Fallback empty"), SDR__label("")
+    ]]
+)
+{
+    return direct_first + direct_last + empty_label;
+}
+
+export int test_metadata_node_direct_first(int param = 1)
+[[
+    SDR__label("Direct node first"), SDR__help("Direct node first help"),
+    anno::display_name("Fallback node first"),
+    anno::description("Fallback node first help"),
+    SDR__category("utilities"),
+    SDR__departments(string[]("lookdev", "lighting")),
+    SDR__pages(string[]("Main", "Advanced")),
+    SDR__openPages(string[]("Main"))
+]]
+{
+    return param;
+}
+
+export int test_metadata_node_direct_last(int param = 1)
+[[
+    anno::display_name("Fallback node last"),
+    anno::description("Fallback node last help"),
+    SDR__label("Direct node last"), SDR__help("Direct node last help"),
+    SDR__category("utilities")
+]]
+{
+    return param;
+}
+
+export int test_metadata_values(
+    int integer_value = 1 [[ SDR__role(12) ]],
+    int boolean_value = 2 [[ SDR__role(false) ]],
+    int float_value = 3 [[ SDR__role(1.25) ]],
+    int vector_value = 4 [[ SDR__role(float3(1.0, 2.0, 3.0)) ]],
+    int array_value = 5 [[ SDR__role(string[]("red", "green", "blue")) ]],
+    int numeric_array = 6 [[ SDR__role(int[](4, 5, 6)) ]],
+    int empty_array = 7 [[ SDR__role(string[]()) ]]
+)
+{
+    return integer_value + boolean_value + float_value + vector_value + array_value + numeric_array + empty_array;
+}
+
+export bool test_metadata_connectable(
+    bool unannotated = false,
+    bool disabled = false [[ SDR__connectable(false) ]],
+    bool enabled = false [[ SDR__connectable(true) ]],
+    bool marker = false [[ SDR__connectable() ]]
+)
+{
+    return unannotated || disabled || enabled || marker;
+}
+
+export material test_metadata_colorspace(
+    uniform texture_2d texture = texture_2d()
+        [[ SDR__colorspace("texture_colorspace") ]],
+    uniform string texture_colorspace = "auto"
+) = material(
+    thin_walled: texture_colorspace == "auto",
+    ior: color(tex::texture_isvalid(texture) ? 1.0 : 0.0)
+);
+
+export float [[
+    anno::display_name("Fallback result"),
+    anno::description("Fallback result help"),
+    SDR__label("Result label"), SDR__help("Result help")
+]]
+test_metadata_return(float param = 0.0)
+{
+    return param;
+}
+
+export int test_metadata_namespace_and_context(
+    int custom = 1 [[
+        display_name("Custom display name"),
+        description("Custom description"),
+        hidden(), enable_if("custom > 0"),
+        Label("Wrong case"), SDR__category("node-only"),
+        SDR__Label("Wrong prefixed case"), sdr__label("Wrong prefix case"),
+        SDR_label("Wrong separator"), SDR__notAField("Unknown suffix"),
+        private_note(7, "Keep me")
+    ]],
+    int ambiguous = 2 [[
+        anno::display_name("Standard label"), SDR__label(10, 20)
+    ]]
+)
+[[
+    display_name("Custom node display name"),
+    description("Custom node description"),
+    SDR__widget("property-only"),
+    SDR__Label("Wrong node suffix case"), sdr__label("Wrong node prefix case"),
+    SDR_label("Wrong node separator"), SDR__notAField("Unknown node suffix"),
+    private_note(8, "Keep node note")
+]]
+{
+    return custom + ambiguous;
+}
+
+export float3 test_metadata_type_override(
+    float3 normal = float3(1.0, 2.0, 3.0) [[
+        SDR__sdrUsdDefinitionType("normal3f"), SDR__renderType("normal")
+    ]]
+)
+{
+    return normal;
+}
+
+// Identical converted scalar values are accepted across repeated overloads.
+// Ineligible multi-argument occurrences must not hide valid scalar values.
+export int test_metadata_repeated_annotations(
+    int bool_last = 1 [[ SDR__connectable(0), SDR__connectable(false) ]],
+    int int_last = 2 [[ SDR__connectable(false), SDR__connectable(0) ]],
+    int repeated_false = 3 [[ SDR__connectable(false), SDR__connectable(false) ]],
+    int repeated_true = 4 [[ SDR__connectable(true), SDR__connectable(true) ]],
+    int number_last = 5 [[ SDR__label("4.25"), SDR__label(4.25) ]],
+    int string_last = 6 [[ SDR__label(2.5), SDR__label("2.5") ]],
+    int ambiguous_last = 7 [[
+        anno::display_name("Standard fallback"),
+        SDR__label("Earlier direct label"), SDR__label(10, 20)
+    ]],
+    int ambiguous_first = 8 [[
+        SDR__label(30, 40), SDR__label("Later direct label"),
+        anno::display_name("Standard fallback")
+    ]]
+)
+{
+    return bool_last + int_last + repeated_false + repeated_true + number_last + string_last + ambiguous_last + ambiguous_first;
+}
+
+// Explicit USD roles must also produce canonical Sdr role types.
+export float3 test_metadata_roles(
+    float3 color_value = float3(0.1, 0.2, 0.3) [[ SDR__sdrUsdDefinitionType("color3f") ]],
+    float3 normal_value = float3(0.0, 0.0, 1.0) [[ SDR__sdrUsdDefinitionType("normal3f") ]],
+    float3 point_value = float3(1.0, 2.0, 3.0) [[ SDR__sdrUsdDefinitionType("point3f") ]],
+    float3 vector_value = float3(4.0, 5.0, 6.0) [[ SDR__sdrUsdDefinitionType("vector3f") ]],
+    color color_as_vector = color(0.25, 0.5, 0.75) [[ SDR__sdrUsdDefinitionType("vector3f") ]]
+)
+{
+    return color_value + normal_value + point_value + vector_value + float3(color_as_vector);
+}
+
+export float3 [[ SDR__sdrUsdDefinitionType("color3f") ]]
+test_metadata_color_output(float3 value = float3(0.0)) { return value; }
+
+export float3 [[ SDR__sdrUsdDefinitionType("normal3f") ]]
+test_metadata_normal_output(float3 value = float3(0.0)) { return value; }
+
+export float3 [[ SDR__sdrUsdDefinitionType("point3f") ]]
+test_metadata_point_output(float3 value = float3(0.0)) { return value; }
+
+export float3 [[ SDR__sdrUsdDefinitionType("vector3f") ]]
+test_metadata_vector_output(float3 value = float3(0.0)) { return value; }
+
+export float2 test_metadata_float2_output(float2 value = float2(0.0)) { return value; }
+
+export enum SparseMode {
+    negative = -3,
+    middle = 8,
+    last = 42,
+    alias = 8
+};
+
+export int test_metadata_tokens(
+    uniform SparseMode enum_token = alias [[ SDR__sdrUsdDefinitionType("token") ]],
+    uniform SparseMode enum_integer = middle,
+    uniform string string_token = "auto" [[ SDR__sdrUsdDefinitionType("token") ]],
+    uniform string empty_token = "" [[ SDR__sdrUsdDefinitionType("token") ]]
+)
+{
+    return int(enum_token) + int(enum_integer) + (string_token == empty_token ? 0 : 1);
+}
+
+export int test_metadata_token_defaults(
+    uniform SparseMode required [[ SDR__sdrUsdDefinitionType("token") ]],
+    uniform SparseMode source = middle,
+    uniform SparseMode referenced = source [[ SDR__sdrUsdDefinitionType("token") ]]
+)
+{
+    return int(required) + int(source) + int(referenced);
+}
+
+export struct MetadataFields {
+    float3 normal [[ SDR__sdrUsdDefinitionType("normal3f"), SDR__label("Normal field") ]];
+    color rgb [[ SDR__sdrUsdDefinitionType("color3f"), SDR__label("RGB field") ]];
+    float alpha [[ SDR__label("Alpha field") ]];
+    float untouched = 0.0;
+};
+
+export MetadataFields
+[[ anno::node_output_port_default(anno::node_port_fields_only) ]]
+test_metadata_fields(
+    float3 normal = float3(0.0, 0.0, 1.0),
+    color rgb = color(0.25, 0.5, 0.75),
+    float alpha = 1.0
+)
+{
+    return MetadataFields(normal, rgb, alpha);
+}
+
+// Identical values from distinct opted-in modules do not conflict.
+export int test_metadata_namespace_identical(
+    int local_last = 1 [[
+        sdr_metadata_other::SDR__label("Shared property"), SDR__label("Shared property"),
+        anno::display_name("SDK fallback last")
+    ]],
+    int other_last = 2 [[
+        SDR__label("Shared property"), sdr_metadata_other::SDR__label("Shared property")
+    ]],
+    int local_false_last = 3 [[
+        sdr_metadata_other::SDR__connectable(false), SDR__connectable(false)
+    ]],
+    int other_false_last = 4 [[
+        SDR__connectable(false), sdr_metadata_other::SDR__connectable(false)
+    ]],
+    int marker_and_bool = 5 [[
+        SDR__connectable(), sdr_metadata_other::SDR__connectable(true)
+    ]]
+)
+[[ sdr_metadata_other::SDR__label("Shared node"), SDR__label("Shared node") ]]
+{
+    return local_last + other_last + local_false_last + other_false_last + marker_and_bool;
+}
+
+export int test_metadata_namespace_node_other_last(int value = 0)
+[[ SDR__label("Shared node"), sdr_metadata_other::SDR__label("Shared node") ]]
+{
+    return value;
+}
+
+export MetadataFields
+[[
+    anno::node_output_port_default(anno::node_port_value_and_fields),
+    SDR__sdrUsdDefinitionType("token"),
+    sdr_metadata_other::SDR__label("Whole return"),
+    SDR__help("Whole return help")
+]]
+test_metadata_fields_return_annotations(
+    float3 normal = float3(0.0, 0.0, 1.0),
+    color rgb = color(0.25, 0.5, 0.75),
+    float alpha = 1.0
+)
+{
+    return MetadataFields(normal, rgb, alpha);
+}
+
+export bool[2] test_metadata_bool_array(bool[2] values = bool[](false, true))
+{
+    return values;
+}
+
+// A bare Sdr-looking name carries no opt-in, even beside an SDK fallback.
+export float3 test_metadata_unprefixed(
+    float3 value = float3(1.0, 2.0, 3.0) [[
+        label("Bare property label"), help("Bare property help"),
+        sdrUsdDefinitionType("normal3f"), renderType("normal"),
+        anno::display_name("SDK property label"),
+        anno::description("SDK property help")
+    ]],
+    int bare_disabled = 0 [[ connectable(false) ]]
+)
+[[
+    label("Bare node label"), help("Bare node help"), category("Bare category"),
+    anno::display_name("SDK node label"), anno::description("SDK node help")
+]]
+{
+    return value + float3(bare_disabled);
+}

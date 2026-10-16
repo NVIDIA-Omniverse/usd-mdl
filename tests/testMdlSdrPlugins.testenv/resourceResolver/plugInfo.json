@@ -1,0 +1,15 @@
+{
+    "Plugins": [{
+        "Type": "resource",
+        "Name": "testResourceUriResolver",
+        "Root": ".",
+        "Info": {
+            "Types": {
+                "TestResourceUriResolver": {
+                    "bases": ["ArDefaultResolver"],
+                    "uriSchemes": ["test-resource"]
+                }
+            }
+        }
+    }]
+}

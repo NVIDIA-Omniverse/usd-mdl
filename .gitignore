@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: Apache-2.0
+
+/build/
+/out/
+/.vs/
+*.user
+/install/
+__pycache__
+*.code-workspace
+openspec/
+/source.cdx.json

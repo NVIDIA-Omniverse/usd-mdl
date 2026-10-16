@@ -1,0 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+export texture_2d entry(
+    uniform texture_2d tex = texture_2d("./valid_diagnostic_texture.png"))
+{ return tex; }

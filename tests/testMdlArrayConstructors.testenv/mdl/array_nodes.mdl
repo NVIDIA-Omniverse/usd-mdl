@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+export struct Light { float intensity; color tint; };
+export struct OtherLight { float intensity; color tint; };
+export struct Packet { Light[2] lights; float scale; };
+export enum Mode { first, second };
+export Light[2] helper(Light value0, Light value1) { return Light[](value0, value1); }
+export float overload(float value) { return value; }
+export int overload(int value) { return value; }
+export float shapes(float3[2] fixed, float3[<N>] deferred, bool3[2] packed,
+                    Light[0] empty_fixed = Light[](), Light[<M>] empty_default = Light[](),
+                    Light[<K>] nonempty_default = Light[](Light(1.0, color(1.0)))) { return 0.0; }
+export Light[2] make_lights(float intensity) { return Light[](Light(intensity, color(1.0)), Light(0.0, color(0.0))); }
+export float defaults(Light[<N>] required, Light[<M>] called = make_lights(1.0)) { return 0.0; }

@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.4;
+
+import ::anno::*;
+
+// Application-owned annotations need no file shipped by usdMdl.
+annotation SDR__label(string text);
+annotation SDR__connectable(bool value);
+
+export float installed_smoke(
+    float value = 0.5 [[
+        SDR__label("Value"),
+        SDR__connectable(false),
+        ::anno::description("Application-supplied parameter")
+    ]]
+)
+{
+    return value;
+}

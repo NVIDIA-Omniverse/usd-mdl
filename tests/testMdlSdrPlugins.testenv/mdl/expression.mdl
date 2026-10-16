@@ -1,0 +1,270 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::state::*;
+using ::expression_types import ConstantRecord;
+
+export float3 test_call_expression
+(
+    float3 param = state::normal()
+)
+{
+    return param;
+}
+
+export float3 test_call_expression_with_args
+(
+    float3 param = state::texture_tangent_v(0)
+)
+{
+    return param;
+}
+
+export int test_parameter_expression
+(
+    int a = 1,
+
+    int b = 1234,
+
+    int param = b
+)
+{
+    return a + b + param;
+}
+
+export int test_multi_parameter_expression
+(
+    int a = 789,
+
+    int b = a,
+
+    int param = b
+)
+{
+    return a + b + param;
+}
+
+export float3[4] test_call_expression_array
+(
+    float3 pFloat3 = float3(0.123, 0.456, 0.789),
+
+    float3[4] param = float3[](
+        state::position(),
+        state::normal(),
+        float3(0.6, 0.7, 0.8),
+        pFloat3
+    )
+)
+{
+    return param;
+}
+
+export float3 test_parameter_call_expression
+(
+    float3 a = state::position(),
+
+    float3 b = a,
+
+    float3 param = b
+)
+{
+    return param;
+}
+
+export double2x2 test_parameter_expression_double_matrix
+(
+    double pDouble = 0.999,
+
+    double2x2 param = double2x2(0.1, pDouble, 0.3, 0.4)
+)
+{
+    return param;
+}
+
+export float2x2 test_parameter_expression_float_matrix
+(
+    float pFloat = 0.999,
+
+    float2x2 param = float2x2(0.1, pFloat, 0.3, 0.4)
+)
+{
+    return param;
+}
+
+export color test_parameter_expression_color
+(
+    float pFloat = 0.999,
+
+    color param = color(0.1, pFloat, 0.3)
+)
+{
+    return param;
+}
+
+export bool4 test_parameter_expression_vector_bool4
+(
+    bool pBool = true,
+
+    bool4 param = bool4(true, pBool, true, false)
+)
+{
+    return param;
+}
+
+export float3 test_parameter_expression_vector_splat
+(
+    float pFloat = 0.25,
+
+    float3 param = float3(pFloat)
+)
+{
+    return param;
+}
+
+export color test_parameter_expression_color_splat
+(
+    float pFloat = 0.25,
+
+    color param = color(pFloat)
+)
+{
+    return param;
+}
+
+export double2x2 test_parameter_expression_matrix_diagonal
+(
+    double pDouble = 2.0,
+
+    double2x2 param = double2x2(pDouble)
+)
+{
+    return param;
+}
+
+export double2x2 test_literal_matrix_columns
+(
+    double2x2 param = double2x2(double2(1.0, 2.0), double2(3.0, 4.0))
+)
+{
+    return param;
+}
+
+export double2x2 test_parameter_expression_matrix_columns
+(
+    double2 column0 = double2(1.0, 2.0),
+
+    double2 column1 = double2(3.0, 4.0),
+
+    double2x2 param = double2x2(column0, column1)
+)
+{
+    return param;
+}
+
+export double2x2 test_parameter_expression_matrix_conversion
+(
+    float2x2 source = float2x2(1.0, 2.0, 3.0, 4.0),
+
+    double2x2 param = double2x2(source)
+)
+{
+    return param;
+}
+
+export float3x2 test_parameter_expression_nonsquare_matrix_columns
+(
+    float2 column0 = float2(1.0, 2.0),
+
+    float2 column1 = float2(3.0, 4.0),
+
+    float2 column2 = float2(5.0, 6.0),
+
+    float3x2 param = float3x2(column0, column1, column2)
+)
+{
+    return param;
+}
+
+export double3x2 test_parameter_expression_nonsquare_matrix_conversion
+(
+    float3x2 source = float3x2(1.0, 2.0, 3.0, 4.0, 5.0, 6.0),
+
+    double3x2 param = double3x2(source)
+)
+{
+    return param;
+}
+
+// Only the literal defaults are SDK constants; parameter defaults remain calls.
+export float2x3 test_diagonal_float2x3(
+    float d = -2.5,
+    float2x3 literal = float2x3(-2.5),
+    float2x3 param = float2x3(d))
+{
+    return literal + param;
+}
+
+export float3x2 test_diagonal_float3x2(
+    float d = -2.5,
+    float3x2 literal = float3x2(-2.5),
+    float3x2 param = float3x2(d))
+{
+    return literal + param;
+}
+
+export double2x3 test_diagonal_double2x3(
+    double d = -2.5,
+    double2x3 literal = double2x3(-2.5),
+    double2x3 param = double2x3(d))
+{
+    return literal + param;
+}
+
+export double3x2 test_diagonal_double3x2(
+    double d = -2.5,
+    double3x2 literal = double3x2(-2.5),
+    double3x2 param = double3x2(d))
+{
+    return literal + param;
+}
+
+// Regression: converting this expression used to report a Tf error while
+// trying to pass a vector to the color constructor, raising in Python.
+export material state_color(
+    color diffuse_color = color(
+        float3(state::normal().x, state::normal().z, -state::normal().y) * 0.5
+        + float3(0.5)),
+    color highlight_color = color(0.2, 0.9, 0.6),
+    float highlight_intensity = 0.25)
+= material(ior: diffuse_color);
+
+// Nested source constructors are supported when the SDK folds them to values.
+export color constant_nested(color param = color(float3(0.1, 0.2, 0.3)))
+{
+    return param;
+}
+
+export double2x2 parameter_nested(
+    double d = 0.25,
+    double2x2 param = double2x2(double2(d), double2(2.0, 3.0)))
+{
+    return param;
+}
+
+export float default_boundaries(
+    float required,
+    float zero = 0.0,
+    float folded = 2.0 * 3.0,
+    float referenced = folded,
+    float computed = folded * 2.0)
+{
+    return required + zero + folded + referenced + computed;
+}
+
+// A constant struct has no Sdr default value, but its expression kind survives.
+export int constant_struct(ConstantRecord param = ConstantRecord(7))
+{
+    return param.i;
+}

@@ -1,0 +1,69 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::anno::*;
+import ::state::*;
+import ::tex::*;
+
+export using ::tex import wrap_mode;
+
+export struct NestedStruct
+{
+    int i = 1;
+
+    float f = 0.2;
+};
+
+export struct TestStruct
+{
+    int pInt = 1;
+
+    int[2] pIntArray = int[](1, 2);
+
+    string pString = "I am a string";
+
+    string[2] pStringArray = string[]("one", "two");
+
+    float3 pVec = float3(0.1, 0.2, 0.3);
+
+    float3[2] pVecArray = float3[](
+        float3(0.1, 0.2, 0.3),
+        float3(1.1, 1.2, 1.3));
+
+    wrap_mode pEnum = ::tex::wrap_clip;
+
+    wrap_mode[2] pEnumArray = wrap_mode[](
+        ::tex::wrap_clip,
+        ::tex::wrap_clamp);
+
+    double2x2 pMatrix = double2x2(0.1, 0.2, 0.3, 0.4);
+
+    float3x2[2] pMatrixArray = float3x2[](
+        float3x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+        float3x2(1.1, 1.2, 1.3, 1.4, 1.5, 1.6));
+
+    texture_2d pTex = texture_2d("./resources/one.png", ::tex::gamma_linear);
+
+    // texture_3d (.vdb) is a recognised MDL type but the SDK ships no
+    // image plugin that can decode .vdb at parse time; using empty
+    // constructors here keeps the module loadable. See
+    // docs/ar-resolver.md "Limitations".
+    texture_3d[2] pTexArray = texture_3d[](
+        texture_3d(),
+        texture_3d());
+
+    NestedStruct pNestedStruct = NestedStruct();
+};
+
+
+export TestStruct
+test_struct
+(
+    TestStruct param = TestStruct()
+)
+{
+    return param;
+}
+

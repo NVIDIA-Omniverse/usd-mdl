@@ -1,0 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+export float choose(float value = 0.25) = value;
+export int choose(int value = 7) = value;
+export material surface() = material();

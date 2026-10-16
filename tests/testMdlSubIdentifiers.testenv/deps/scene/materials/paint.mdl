@@ -1,0 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+// Layer-local candidate with the same filename but different content.
+export int paint(int marker = 29) { return -marker; }

@@ -1,0 +1,214 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::anno::*;
+
+module [[
+    anno::description("I am a MDL module")
+]];
+
+export color test_annotation_range
+(
+    int pIntSoft = 1
+    [[
+        anno::soft_range(0,10)
+    ]],
+
+    color pColorHard = color(0.1, 0.3, 0.5)
+    [[
+        anno::hard_range(color(0.1, 0.2, 0.3), color(0.4, 0.5, 0.6))
+    ]]
+)
+{
+    return pIntSoft * pColorHard;
+}
+
+export int test_annotation_string
+(
+    int pInt1 = 1
+    [[
+        anno::display_name("Parameter")
+    ]],
+
+    int pInt2 = 1
+    [[
+        anno::in_group("A")
+    ]],
+
+    int pInt3 = 1
+    [[
+        anno::in_group("AA", "BB")
+    ]],
+
+    int pInt4 = 1
+    [[
+        anno::in_group("AAA", "BBB", "CCC")
+    ]]
+)
+{
+    return pInt1 + pInt2 + pInt3 + pInt4;
+}
+
+export int
+[[
+    anno::description("Return type int")
+]]
+test_annotation_return
+(
+    int pInt = 1
+)
+{
+    return pInt;
+}
+
+export int test_annotation_hidden
+(
+    int pInt = 1
+    [[
+        anno::hidden()
+    ]]
+)
+{
+    return pInt;
+}
+
+
+export int test_annotation_array
+(
+    int pInt = 1
+    [[
+        anno::key_words(string[2]("one", "two"))
+    ]]
+)
+{
+    return pInt;
+}
+
+export int test_annotation_tuple
+(
+    int pInt = 1
+    [[
+        anno::version(1, 2, 3, "I can't\\tbreak metadata")
+    ]]
+)
+{
+    return pInt;
+}
+
+
+export int test_annotation_function
+(
+    int pInt = 1
+)
+[[
+    anno::description("I am a MDL function")
+]]
+{
+    return pInt;
+}
+
+export struct TestStruct
+[[
+    anno::node_output_port_default(anno::node_port_value_and_fields)
+]]
+{
+    int i = 1;
+
+    float f = 0.2;
+};
+
+export TestStruct test_annotation_struct_value_and_fields
+(
+    TestStruct pStruct = TestStruct()
+)
+{
+    return pStruct;
+}
+
+export TestStruct
+[[
+    anno::node_output_port_default(anno::node_port_fields_only)
+]]
+test_annotation_struct_fields_only
+(
+    TestStruct pStruct = TestStruct()
+)
+{
+    return pStruct;
+}
+
+export TestStruct
+[[
+    anno::node_output_port_default(anno::node_port_value_only)
+]]
+test_annotation_struct_value_only
+(
+    TestStruct pStruct = TestStruct()
+)
+{
+    return pStruct;
+}
+
+export int test_annotation_module
+(
+    int pInt = 1
+)
+{
+    return pInt;
+}
+
+export enum detail
+[[
+    anno::description("I am a MDL enum")
+]]
+{
+    low = 1
+    [[
+        anno::description("I am value low")
+    ]],
+
+    medium = 2
+    [[
+        anno::description("I am value medium")
+    ]],
+
+    high = 3
+    [[
+        anno::description("I am value high")
+    ]]
+};
+
+export detail test_annotation_enum
+(
+    detail param = medium
+)
+{
+    return param;
+}
+
+export struct AnotherTestStruct
+[[
+    anno::description("I am a MDL struct")
+]]
+{
+    int i = 1
+    [[
+        anno::description("I am struct field i")
+    ]];
+
+    float f = 0.2
+    [[
+        anno::description("I am struct field f")
+    ]];
+};
+
+export AnotherTestStruct
+test_annotation_struct_type
+(
+    AnotherTestStruct pStruct = AnotherTestStruct()
+)
+{
+    return pStruct;
+}

@@ -1,0 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+// Keep generated field accessors out of the expression-module registration test.
+export struct ConstantRecord { int i; };

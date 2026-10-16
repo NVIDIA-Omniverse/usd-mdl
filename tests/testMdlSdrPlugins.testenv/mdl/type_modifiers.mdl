@@ -1,0 +1,20 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+export uniform int test_type_modifier_uniform
+(
+    uniform int param = 1
+)
+{
+    return param;
+}
+
+export varying int test_type_modifier_varying
+(
+    varying int param = 1
+)
+{
+    return param;
+}

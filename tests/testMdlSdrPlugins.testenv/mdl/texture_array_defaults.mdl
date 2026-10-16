@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+import ::tex::*;
+
+// Root-relative MDL paths identify real fixtures in the configured search root.
+// The scalar defaults in parameter_array also make the SDK register these
+// resources on older SDKs. texture_array_only.mdl isolates the enumeration
+// defect fixed in SDK 2026.0.2; keep this fixture for parameter-expression tests.
+export int literal_array(uniform texture_2d[2] param = texture_2d[](
+    texture_2d("/resources/one.png", tex::gamma_linear, "R"),
+    texture_2d("/resources/two.png", tex::gamma_srgb, "G")))
+{ return tex::width(param[0]) + tex::width(param[1]); }
+
+export int parameter_array(
+    uniform texture_2d first = texture_2d("/resources/one.png", tex::gamma_linear, "R"),
+    uniform texture_2d second = texture_2d("/resources/two.png", tex::gamma_srgb, "G"),
+    uniform texture_2d[2] param = texture_2d[](first, second))
+{ return tex::width(param[0]) + tex::width(param[1]); }

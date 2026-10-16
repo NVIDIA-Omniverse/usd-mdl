@@ -1,0 +1,23 @@
+{
+    "Plugins": [
+        {
+            "Info": {
+                "Types": {
+                    "MdlDiscoveryPlugin": {
+                        "bases": ["SdrDiscoveryPlugin"],
+                        "displayName": "MDL discovery"
+                    },
+                    "MdlParserPlugin": {
+                        "bases": ["SdrParserPlugin"],
+                        "displayName": "MDL parser"
+                    }
+                }
+            },
+            "LibraryPath": "@PLUG_INFO_LIBRARY_PATH@",
+            "Name": "usdMdl",
+            "ResourcePath": "resources",
+            "Root": "@PLUG_INFO_ROOT@",
+            "Type": "library"
+        }
+    ]
+}

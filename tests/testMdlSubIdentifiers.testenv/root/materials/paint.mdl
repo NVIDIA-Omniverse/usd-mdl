@@ -1,0 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+// Library candidate: its default identifies the content chosen by USD lookup.
+export int paint(int marker = 11) { return marker; }

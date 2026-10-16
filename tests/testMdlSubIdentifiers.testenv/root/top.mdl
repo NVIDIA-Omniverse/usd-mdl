@@ -1,0 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+import ::pkg::another::*;
+export struct Local { int i = 29; };
+export int top(Local own) { return own.i; }
+export int top(pkg::another::Thing external_value) { return external_value.i; }

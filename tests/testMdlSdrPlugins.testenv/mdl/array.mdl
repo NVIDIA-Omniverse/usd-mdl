@@ -1,0 +1,487 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::df::*;
+import ::state::*;
+import ::tex::*;
+
+export using ::tex import wrap_mode;
+
+
+export bool[4] test_bool_array
+(
+    bool[4] param = bool[](
+        true,
+        false,
+        true,
+        false)
+)
+{
+    return param;
+}
+
+export material test_bsdfMeasurement_array
+(
+    uniform bsdf_measurement[2] param = bsdf_measurement[](
+        bsdf_measurement("./resources/one.mbsdf"),
+        bsdf_measurement("./resources/two.mbsdf"))
+) =
+material(
+    surface: material_surface(
+        scattering: df::fresnel_layer(
+            ior: 1.5,
+            layer: df::measured_bsdf(measurement: param[0]),
+            base: df::measured_bsdf(measurement: param[1])
+        )
+    )
+);
+
+
+export color[3] test_color_array
+(
+    color[3] param = color[](
+        color(0.1, 0.2, 0.3),
+        color(0.4, 0.5, 0.6),
+        color(0.7, 0.8, 0.9))
+)
+{
+    return param;
+}
+
+export double[6] test_double_array
+(
+    double[6] param = double[](1.1, 2.2, 3.3, 4.4, 5.5, 6.6)
+)
+{
+    return param;
+}
+
+export wrap_mode[3] test_enum_array
+(
+    wrap_mode[3] param = wrap_mode[](
+        ::tex::wrap_clip,
+        ::tex::wrap_mirrored_repeat,
+        ::tex::wrap_clamp)
+)
+{
+    return param;
+}
+
+export float[5] test_float_array
+(
+    float[5] param = float[](1.1, 2.2, 3.3, 4.4, 5.5)
+)
+{
+    return param;
+}
+
+export int[4] test_int_array
+(
+    int[4] param = int[](1, 2, 3, 4)
+)
+{
+    return param;
+}
+
+export material test_lightProfile_array
+(
+    uniform light_profile[2] param = light_profile[](
+        light_profile("./resources/one.ies"),
+        light_profile("./resources/two.ies"))
+) =
+material (
+    surface: material_surface (
+        emission:  material_emission (
+            emission: df::clamped_mix(
+                df::edf_component[](
+                    df::edf_component(0.5, df::measured_edf(profile: param[0])),
+                    df::edf_component(0.5, df::measured_edf(profile: param[1]))
+                )
+            )
+        )
+    )
+);
+
+export string[5] test_string_array
+(
+    string[5] param = string[]("my", "mind", "is", "going", "")
+)
+{
+    return param;
+}
+
+export color test_texture2D_array
+(
+    uniform texture_2d[2] param = texture_2d[](
+        texture_2d("./resources/one.png", ::tex::gamma_linear),
+        texture_2d("./resources/two.png", ::tex::gamma_srgb))
+)
+{
+    float3 tex_coord3 = state::texture_coordinate(0);
+    float2 text_coord2(tex_coord3.x, tex_coord3.y);
+    return tex::lookup_color(param[0], text_coord2) + tex::lookup_color(param[1], text_coord2);
+}
+
+export color test_texture3D_array
+(
+    // texture_3d (.vdb) load is unsupported - the SDK ships no image
+    // plugin for that format.  Empty constructors keep load_module
+    // succeeding for the rest of array.mdl; tests cover the empty defaults
+    // and declared array type.
+    uniform texture_3d[2] param = texture_3d[](
+        texture_3d(),
+        texture_3d())
+)
+{
+    return tex::lookup_color(param[0], state::texture_coordinate(0)) + tex::lookup_color(param[1], state::texture_coordinate(0));
+}
+
+export color test_textureCube_array
+(
+    uniform texture_cube[2] param = texture_cube[](
+        texture_cube("./resources/one.cube.png", ::tex::gamma_linear),
+        texture_cube("./resources/two.cube.png", ::tex::gamma_srgb))
+)
+{
+    return tex::lookup_color(param[0], state::texture_coordinate(0)) + tex::lookup_color(param[1], state::texture_coordinate(0));
+}
+
+export color test_texturePtex_array
+(
+    // texture_ptex load is unsupported - the SDK ships no Ptex image
+    // plugin.  Empty constructors keep load_module succeeding for
+    // the rest of array.mdl; tests cover the empty defaults and
+    // declared array type.
+    uniform texture_ptex[2] param = texture_ptex[](
+        texture_ptex(),
+        texture_ptex())
+)
+{
+    return tex::lookup_color(param[0]) + tex::lookup_color(param[1]);
+}
+
+export double2x2[2] test_matrix_double2x2_array
+(
+    double2x2[2] param = double2x2[](
+        double2x2(0.1, 0.2, 0.3, 0.4),
+        double2x2(1.1, 1.2, 1.3, 1.4))
+)
+{
+    return param;
+}
+
+export double2x3[2] test_matrix_double2x3_array
+(
+    double2x3[2] param = double2x3[](
+        double2x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+        double2x3(1.1, 1.2, 1.3, 1.4, 1.5, 1.6))
+)
+{
+    return param;
+}
+
+export double2x4[2] test_matrix_double2x4_array
+(
+    double2x4[2] param = double2x4[](
+        double2x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+        double2x4(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8))
+)
+{
+    return param;
+}
+
+export double3x2[2] test_matrix_double3x2_array
+(
+    double3x2[2] param = double3x2[](
+        double3x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+        double3x2(1.1, 1.2, 1.3, 1.4, 1.5, 1.6))
+)
+{
+    return param;
+}
+
+export double3x3[2] test_matrix_double3x3_array
+(
+    double3x3[2] param = double3x3[](
+        double3x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+        double3x3(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9))
+)
+{
+    return param;
+}
+
+export double3x4[2] test_matrix_double3x4_array
+(
+    double3x4[2] param = double3x4[](
+        double3x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2),
+        double3x4(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2))
+)
+{
+    return param;
+}
+
+export double4x2[2] test_matrix_double4x2_array
+(
+    double4x2[2] param = double4x2[](
+        double4x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+        double4x2(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8))
+)
+{
+    return param;
+}
+
+export double4x3[2] test_matrix_double4x3_array
+(
+    double4x3[2] param = double4x3[](
+        double4x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2),
+        double4x3(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2))
+)
+{
+    return param;
+}
+
+export double4x4[2] test_matrix_double4x4_array
+(
+    double4x4[2] param = double4x4[](
+        double4x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6),
+        double4x4(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6))
+)
+{
+    return param;
+}
+
+export float2x2[2] test_matrix_float2x2_array
+(
+    float2x2[2] param = float2x2[](
+        float2x2(0.1, 0.2, 0.3, 0.4),
+        float2x2(1.1, 1.2, 1.3, 1.4))
+)
+{
+    return param;
+}
+
+export float2x3[2] test_matrix_float2x3_array
+(
+    float2x3[2] param = float2x3[](
+    float2x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+    float2x3(1.1, 1.2, 1.3, 1.4, 1.5, 1.6))
+)
+{
+    return param;
+}
+
+export float2x4[2] test_matrix_float2x4_array
+(
+    float2x4[2] param = float2x4[](
+        float2x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+        float2x4(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8))
+)
+{
+    return param;
+}
+
+export float3x2[2] test_matrix_float3x2_array
+(
+    float3x2[2] param = float3x2[](
+        float3x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+        float3x2(1.1, 1.2, 1.3, 1.4, 1.5, 1.6))
+)
+{
+    return param;
+}
+
+export float3x3[2] test_matrix_float3x3_array
+(
+    float3x3[2] param = float3x3[](
+        float3x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+        float3x3(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9))
+)
+{
+    return param;
+}
+
+export float3x4[2] test_matrix_float3x4_array
+(
+    float3x4[2] param = float3x4[](
+        float3x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2),
+        float3x4(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2))
+)
+{
+    return param;
+}
+
+export float4x2[2] test_matrix_float4x2_array
+(
+    float4x2[2] param = float4x2[](
+        float4x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+        float4x2(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8))
+)
+{
+    return param;
+}
+
+export float4x3[2] test_matrix_float4x3_array
+(
+    float4x3[2] param = float4x3[](
+        float4x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2),
+        float4x3(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2))
+)
+{
+    return param;
+}
+
+export float4x4[2] test_matrix_float4x4_array
+(
+    float4x4[2] param = float4x4[](
+        float4x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6),
+        float4x4(1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6))
+)
+{
+    return param;
+}
+
+export bool2[2] test_vector_bool2_array
+(
+    bool2[2] param = bool2[](
+        bool2(true, false),
+        bool2(false, true))
+)
+{
+    return param;
+}
+
+export bool3[2] test_vector_bool3_array
+(
+    bool3[2] param = bool3[](
+        bool3(true, false, true),
+        bool3(false, true, false))
+)
+{
+    return param;
+}
+
+export bool4[2] test_vector_bool4_array
+(
+    bool4[2] param = bool4[](
+        bool4(true, false, true, false),
+        bool4(false, true, false, true))
+)
+{
+    return param;
+}
+
+export double2[2] test_vector_double2_array
+(
+    double2[2] param = double2[](
+        double2(0.1, 0.2),
+        double2(1.1, 1.2))
+)
+{
+    return param;
+}
+
+export double3[2] test_vector_double3_array
+(
+    double3[2] param = double3[](
+        double3(0.1, 0.2, 0.3),
+        double3(1.1, 1.2, 1.3))
+)
+{
+    return param;
+}
+
+export double4[2] test_vector_double4_array
+(
+    double4[2] param = double4[](
+        double4(0.1, 0.2, 0.3, 0.4),
+        double4(1.1, 1.2, 1.3, 1.4))
+)
+{
+    return param;
+}
+
+export float2[2] test_vector_float2_array
+(
+    float2[2] param = float2[](
+        float2(0.1, 0.2),
+        float2(1.1, 1.2))
+)
+{
+    return param;
+}
+
+export float3[2] test_vector_float3_array
+(
+    float3[2] param = float3[](
+        float3(0.1, 0.2, 0.3),
+        float3(1.1, 1.2, 1.3))
+)
+{
+    return param;
+}
+
+export float4[2] test_vector_float4_array
+(
+    float4[2] param = float4[](
+        float4(0.1, 0.2, 0.3, 0.4),
+        float4(1.1, 1.2, 1.3, 1.4))
+)
+{
+    return param;
+}
+
+export int2[2] test_vector_int2_array
+(
+    int2[2] param = int2[](
+        int2(1, 2),
+        int2(2, 1))
+)
+{
+    return param;
+}
+
+export int3[2] test_vector_int3_array
+(
+    int3[2] param = int3[](
+        int3(1, 2, 3),
+        int3(3, 2, 1))
+)
+{
+    return param;
+}
+
+export int4[2] test_vector_int4_array
+(
+    int4[2] param = int4[](
+        int4(1, 2, 3, 4),
+        int4(4, 3, 2, 1))
+)
+{
+    return param;
+}
+
+export struct SimpleStruct
+{
+    int i = 1;
+
+    float f = 0.2;
+};
+
+export SimpleStruct[2] test_struct_array
+(
+    SimpleStruct[2] param = SimpleStruct[](
+        SimpleStruct(),
+        SimpleStruct())
+)
+{
+    return param;
+}
+export color test_dynamic_array
+(
+    uniform color[<N>] param = color[](color(1.0))
+)
+{
+    return param[0];
+}

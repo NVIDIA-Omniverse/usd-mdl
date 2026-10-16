@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+// Original test interface. It intentionally returns fallback values and does
+// not implement the Preview Surface renderer or copy Kit material code.
+import ::anno::*;
+import ::df::*;
+
+export enum WrapMode { black = -1, clamp = 2, repeat = 7, mirror = 11, useMetadata = 20 };
+export enum OpacityMode { transparent = 4, presence = 9 };
+
+export float UsdPrimvarReader_float(uniform string varname = "", float fallback = 0.0) { return fallback; }
+export float2 UsdPrimvarReader_float2(uniform string varname = "", float2 fallback = float2(0.0)) { return fallback; }
+export float3 UsdPrimvarReader_float3(uniform string varname = "", float3 fallback = float3(0.0)) { return fallback; }
+export float4 UsdPrimvarReader_float4(uniform string varname = "", float4 fallback = float4(0.0)) { return fallback; }
+export int UsdPrimvarReader_int(uniform string varname = "", int fallback = 0) { return fallback; }
+export string UsdPrimvarReader_string(uniform string varname = "", uniform string fallback = "") { return fallback; }
+export float3 UsdPrimvarReader_normal(uniform string varname = "", float3 fallback = float3(0.0)) { return fallback; }
+export float3 UsdPrimvarReader_point(uniform string varname = "", float3 fallback = float3(0.0)) { return fallback; }
+export float3 UsdPrimvarReader_vector(uniform string varname = "", float3 fallback = float3(0.0)) { return fallback; }
+export double4x4 UsdPrimvarReader_matrix(uniform string varname = "", double4x4 fallback = double4x4(1.0)) { return fallback; }
+
+// "in" is reserved by MDL; the USD input binds to st through implementationName.
+export float2 UsdTransform2d(float2 st = float2(0.0), float rotation = 0.0,
+                           float2 scale = float2(1.0), float2 translation = float2(0.0))
+{
+    return st * scale + translation + float2(rotation * 0.0);
+}
+
+export struct TextureReturnOut { float r; float g; float b; float a; color rgb; };
+export TextureReturnOut
+[[ anno::node_output_port_default(anno::node_port_fields_only) ]]
+UsdUVTexture(uniform texture_2d file = texture_2d(), float2 st = float2(0.0),
+             uniform WrapMode wrapS = useMetadata, uniform WrapMode wrapT = useMetadata,
+             float4 fallback = float4(0.0, 0.0, 0.0, 1.0), float4 scale = float4(1.0),
+             float4 bias = float4(0.0), uniform string sourceColorSpace = "auto")
+{
+    float4 value = fallback * scale + bias;
+    return TextureReturnOut(value.x, value.y, value.z, value.w,
+                            color(value.x, value.y, value.z));
+}
+
+export material UsdPreviewSurface(
+    color diffuseColor = color(0.18), color emissiveColor = color(0.0),
+    uniform int useSpecularWorkflow = 0, color specularColor = color(0.0),
+    float metallic = 0.0, float roughness = 0.5, float clearcoat = 0.0,
+    float clearcoatRoughness = 0.01, float opacity = 1.0,
+    uniform OpacityMode opacityMode = transparent, float opacityThreshold = 0.0,
+    float ior = 1.5, float3 normal = float3(0.0, 0.0, 1.0),
+    float displacement = 0.0, float occlusion = 1.0
+) = material(
+    surface: material_surface(scattering: df::diffuse_reflection_bsdf(tint: diffuseColor)),
+    geometry: material_geometry(normal: normal,
+        displacement: float3(0.0, 0.0, displacement),
+        cutout_opacity: opacityMode == presence ? opacity : 1.0)
+);
+
+// Automatic canonical registration must not eagerly publish arbitrary exports.
+export float ApplicationOnly(float value = 0.25) { return value; }

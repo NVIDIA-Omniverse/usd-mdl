@@ -1,0 +1,148 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+export double2x2 test_matrix_double2x2
+(
+    double2x2 param = double2x2(0.1, 0.2, 0.3, 0.4)
+)
+{
+    return param;
+}
+
+export double2x3 test_matrix_double2x3
+(
+    double2x3 param = double2x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
+)
+{
+    return param;
+}
+
+export double2x4 test_matrix_double2x4
+(
+    double2x4 param = double2x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
+)
+{
+    return param;
+}
+
+export double3x2 test_matrix_double3x2
+(
+    double3x2 param = double3x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
+)
+{
+    return param;
+}
+
+export double3x3 test_matrix_double3x3
+(
+    double3x3 param = double3x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+)
+{
+    return param;
+}
+
+export double3x4 test_matrix_double3x4
+(
+    double3x4 param = double3x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
+)
+{
+    return param;
+}
+
+export double4x2 test_matrix_double4x2
+(
+    double4x2 param = double4x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
+)
+{
+    return param;
+}
+
+export double4x3 test_matrix_double4x3
+(
+    double4x3 param = double4x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
+)
+{
+    return param;
+}
+
+export double4x4 test_matrix_double4x4
+(
+    double4x4 param = double4x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6)
+)
+{
+    return param;
+}
+
+export float2x2 test_matrix_float2x2
+(
+    float2x2 param = float2x2(0.1, 0.2, 0.3, 0.4)
+)
+{
+    return param;
+}
+
+export float2x3 test_matrix_float2x3
+(
+    float2x3 param = float2x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
+)
+{
+    return param;
+}
+
+export float2x4 test_matrix_float2x4
+(
+    float2x4 param = float2x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
+)
+{
+    return param;
+}
+
+export float3x2 test_matrix_float3x2
+(
+    float3x2 param = float3x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
+)
+{
+    return param;
+}
+
+export float3x3 test_matrix_float3x3
+(
+    float3x3 param = float3x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+)
+{
+    return param;
+}
+
+export float3x4 test_matrix_float3x4
+(
+    float3x4 param = float3x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
+)
+{
+    return param;
+}
+
+export float4x2 test_matrix_float4x2
+(
+    float4x2 param = float4x2(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
+)
+{
+    return param;
+}
+
+export float4x3 test_matrix_float4x3
+(
+    float4x3 param = float4x3(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2)
+)
+{
+    return param;
+}
+
+export float4x4 test_matrix_float4x4
+(
+    float4x4 param = float4x4(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6)
+)
+{
+    return param;
+}

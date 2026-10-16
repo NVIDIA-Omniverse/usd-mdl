@@ -1,0 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+export using ::tex import wrap_mode;
+export using ::pkg::another import Bar2;
+export int reexport_enum(wrap_mode value) { return int(value); }
+export int reexport_struct(Bar2 value) { return value.i; }

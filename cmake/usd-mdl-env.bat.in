@@ -1,0 +1,28 @@
+@echo off
+rem SPDX-License-Identifier: Apache-2.0
+rem
+rem Configure the current cmd.exe session for a usd-mdl install.  Set
+rem the env vars in the calling shell (not a sub-process):
+rem
+rem     call <prefix>\bin\usd-mdl-env.bat
+rem
+rem Variables set:
+rem   PXR_PLUGINPATH_NAME   directory USD's Plug system scans for plugInfo.json
+rem   PYTHONPATH            <prefix>\lib\python prepended so `import UsdMdl` works
+rem
+rem The script locates its own install prefix relative to itself, so it
+rem stays correct if the install tree is relocated. The application supplies
+rem USD_MDL_SEARCH_PATHS; this helper leaves that setting unchanged.
+
+rem `%~dp0` is the directory this .bat lives in (with trailing backslash).
+rem Walk one level up to the install prefix.
+for %%I in ("%~dp0..") do set "USDMDL_PREFIX=%%~fI"
+
+set "PXR_PLUGINPATH_NAME=%USDMDL_PREFIX%\plugin\usd"
+if defined PYTHONPATH (
+    set "PYTHONPATH=%USDMDL_PREFIX%\lib\python;%PYTHONPATH%"
+) else (
+    set "PYTHONPATH=%USDMDL_PREFIX%\lib\python"
+)
+
+set "USDMDL_PREFIX="

@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: Apache-2.0
+@PACKAGE_INIT@
+
+# usdMdl CMake package config
+#
+# Exported target:
+#   usdMdl::usdMdl - the USD Sdr discovery + parser plugin (shared
+#                    library). Link this to call the C++ lifecycle API
+#                    from <usdMdl/initialize.h> or
+#                    UsdMdlAddModuleToRegistry() from
+#                    <usdMdl/addModuleToRegistry.h>. Normal Sdr-driven
+#                    consumption (UsdShade / Sdr.Registry()) does not
+#                    require any link; configure PXR_PLUGINPATH_NAME
+#                    for the runtime installation so USD discovers the
+#                    plugin.  The MDL SDK runtime layer (Context,
+#                    EntityResolver, ModuleLoader, etc., under
+#                    src/usdMdl/runtime/) is folded into this single
+#                    shared library; there is no separate runtime
+#                    target.
+#
+# Installation metadata for configure-time checks and tests (e.g. CI):
+#   usdMdl_PLUGIN_DIR     - absolute plugin/usd/ directory in the found install.
+#
+# These absolute paths describe the installation on the build machine.
+# Do not embed them in distributed binaries (e.g. via compile definitions or
+# generated headers) or shipped launchers: those paths need not exist on the
+# user's system. They are metadata for checks/tests of the local installation.
+# Obtain runtime paths from the application's configuration or environment,
+# or use the environment helper shipped with the runtime installation.
+
+include(CMakeFindDependencyMacro)
+
+# Dependency configs may change PACKAGE_PREFIX_DIR with CMake 3.29 or older.
+set(_usdMdl_package_prefix "${PACKAGE_PREFIX_DIR}")
+find_dependency(pxr REQUIRED)
+find_dependency(mdl REQUIRED CONFIG)
+
+include("${CMAKE_CURRENT_LIST_DIR}/usdMdlTargets.cmake")
+
+set_and_check(usdMdl_PLUGIN_DIR "${_usdMdl_package_prefix}/plugin/usd")
+unset(_usdMdl_package_prefix)

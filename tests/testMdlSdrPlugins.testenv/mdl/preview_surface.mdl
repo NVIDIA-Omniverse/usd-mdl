@@ -1,0 +1,88 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+// Original, portable interface fixture. It exercises the Preview Surface
+// family of port shapes; it is not a reference renderer implementation.
+import ::anno::*;
+import ::df::*;
+import ::state::*;
+
+export enum WrapMode {
+    black = -1,
+    clamp = 2,
+    repeat = 7,
+    mirror = 11,
+    useMetadata = 20
+};
+
+export enum OpacityMode {
+    transparent = 4,
+    presence = 9
+};
+
+export float2 PreviewUv(uniform int channel = 0)
+{
+    float3 coordinate = state::texture_coordinate(channel);
+    return float2(coordinate.x, coordinate.y);
+}
+
+// MDL reserves "in". The USD definition binds its inputs:in to this st input.
+export float2 PreviewTransform2d(
+    float2 st = float2(0.0),
+    float rotation = 0.0,
+    float2 scale = float2(1.0),
+    float2 translation = float2(0.0)
+)
+{
+    // Rotation participates so all parameter bindings have executable uses.
+    return st * scale + translation + float2(rotation * 0.0);
+}
+
+export struct TextureReturnOut {
+    float r;
+    float g;
+    float b;
+    float a;
+    color rgb;
+};
+
+export TextureReturnOut
+[[ anno::node_output_port_default(anno::node_port_fields_only) ]]
+PreviewTexture(
+    uniform texture_2d file = texture_2d(),
+    float2 st = float2(0.0),
+    uniform WrapMode wrapS = useMetadata,
+    uniform WrapMode wrapT = useMetadata,
+    float4 fallback = float4(0.0, 0.0, 0.0, 1.0),
+    uniform string sourceColorSpace = "auto"
+)
+{
+    // Resource-free fallback keeps this fixture usable on every test machine.
+    return TextureReturnOut(fallback.x, fallback.y, fallback.z, fallback.w,
+                            color(fallback.x, fallback.y, fallback.z));
+}
+
+export material PreviewSurface(
+    color diffuseColor = color(0.18),
+    color emissiveColor = color(0.0),
+    float3 normal = state::normal(),
+    float opacity = 1.0,
+    float displacement = 0.0,
+    uniform OpacityMode opacityMode = transparent
+) = material(
+    surface: material_surface(
+        scattering: df::diffuse_reflection_bsdf(tint: diffuseColor),
+        emission: material_emission(emission: df::diffuse_edf(), intensity: emissiveColor)
+    ),
+    geometry: material_geometry(
+        normal: normal,
+        displacement: float3(0.0, 0.0, displacement),
+        cutout_opacity: opacityMode == presence ? opacity : 1.0
+    )
+);
+
+// Ambiguous names are not safe shader-definition bindings.
+export float Overloaded(float value = 1.0) { return value; }
+export int Overloaded(int value = 1) { return value; }

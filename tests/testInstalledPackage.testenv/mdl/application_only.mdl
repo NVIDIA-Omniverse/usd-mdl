@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.4;
+
+import ::math::*;
+
+// Only application content and SDK-embedded modules are needed for this node.
+export float application_only(float value = math::sqrt(0.25))
+{
+    return value;
+}

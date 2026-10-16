@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+export struct Bar2 { int i = 11; };
+export struct Thing { int i = 13; };

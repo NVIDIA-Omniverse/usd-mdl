@@ -1,0 +1,36 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+#
+# Emit environment-variable exports for a usd-mdl install.  Source the
+# output to configure the current shell, e.g.:
+#
+#     eval "$(<prefix>/bin/usd-mdl-env.sh)"
+#
+# Variables set:
+#   PXR_PLUGINPATH_NAME   - directory USD's Plug system scans for plugInfo.json
+#   PYTHONPATH            - <prefix>/lib/python prepended (so `import UsdMdl` works)
+#
+# The script locates its own install prefix relative to itself, so it
+# stays correct if the install tree is relocated. The application supplies
+# USD_MDL_SEARCH_PATHS; this helper leaves that setting unchanged.
+
+set -u
+
+# Resolve the directory this script lives in, then the parent (the install prefix).
+script_path=$(readlink -f "$0" 2>/dev/null || python3 -c "import os,sys;print(os.path.realpath(sys.argv[1]))" "$0")
+script_dir=$(dirname "$script_path")
+prefix=$(cd "$script_dir/.." && pwd)
+
+# Quote values for the shell that will eval this script's output. Expanding a
+# path directly inside double quotes would let characters such as `$`,
+# backticks, or an embedded quote acquire syntax during the later eval.
+shell_quote()
+{
+    printf "'"
+    printf '%s' "$1" | sed "s/'/'\"'\"'/g"
+    printf "'"
+}
+
+python_path="$prefix/lib/python${PYTHONPATH:+:$PYTHONPATH}"
+printf 'export PXR_PLUGINPATH_NAME=%s\n' "$(shell_quote "$prefix/plugin/usd")"
+printf 'export PYTHONPATH=%s\n' "$(shell_quote "$python_path")"

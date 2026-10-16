@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+export float[0] empty_array(float[0] param = float[]()) { return param; }
+export float[1] singleton_array(float[1] param = float[](2.0)) { return param; }
+export uniform float[2] uniform_array(uniform float[2] param = float[](1.0, 2.0))
+{ return param; }
+export varying float2x3[2] varying_matrix_array(
+    varying float2x3[2] param = float2x3[](float2x3(1.0), float2x3(2.0)))
+{ return param; }
+export uniform float2x3[N] deferred_matrix_array(
+    uniform float2x3[<N>] param = float2x3[](float2x3(1.0)),
+    uniform float[N] weights = float[](1.0))
+{ return param; }
+
+// Named types with identical storage must retain distinct qualified symbols.
+export struct StructA { float value = 0.0; };
+export struct StructB { float value = 0.0; };
+export enum EnumA { a0 = 0, a1 = 1 };
+export enum EnumB { b0 = 0, b1 = 1 };
+export StructA struct_a(StructA param = StructA()) { return param; }
+export StructB struct_b(StructB param = StructB()) { return param; }
+export EnumA enum_a(EnumA param = a0) { return param; }
+export EnumB enum_b(EnumB param = b0) { return param; }
+export StructA[2] struct_array(StructA[2] param = StructA[](StructA(), StructA()))
+{ return param; }
+export EnumA[2] enum_array(EnumA[2] param = EnumA[](a0, a1)) { return param; }

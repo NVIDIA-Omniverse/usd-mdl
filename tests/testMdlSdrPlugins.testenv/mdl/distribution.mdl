@@ -1,0 +1,14 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::df::*;
+
+// MDL forbids material parameters of distribution type. Functions returning
+// distributions let us verify the Sdr output type and render-type metadata.
+
+export bsdf      test_bsdf     (color tint = color(0.5)) = df::diffuse_reflection_bsdf(tint: tint);
+export edf       test_edf      ()                        = df::diffuse_edf();
+export vdf       test_vdf      ()                        = df::anisotropic_vdf();
+export hair_bsdf test_hair_bsdf()                        = df::chiang_hair_bsdf();

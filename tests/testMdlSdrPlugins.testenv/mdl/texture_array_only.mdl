@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+import ::tex::*;
+
+// No scalar reference may mention these textures in this module: older SDKs
+// otherwise enumerate them through the scalar and hide the array-only defect.
+export int literal_array(uniform texture_2d[2] param = texture_2d[](
+    texture_2d("/resources/one.png", tex::gamma_linear, "R"),
+    texture_2d("/resources/two.png", tex::gamma_srgb, "G")))
+{ return tex::width(param[0]) + tex::width(param[1]); }

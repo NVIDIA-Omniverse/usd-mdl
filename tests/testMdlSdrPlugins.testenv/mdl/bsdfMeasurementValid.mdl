@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+// Scalar references ensure both resources are enumerated on older SDKs too.
+export material valid_one(
+    uniform bsdf_measurement param = bsdf_measurement("./resources/valid_one.mbsdf")
+) = material();
+
+export material valid_two(
+    uniform bsdf_measurement param = bsdf_measurement("./resources/valid_two.mbsdf")
+) = material();
+
+export material valid_array(
+    uniform bsdf_measurement[2] param = bsdf_measurement[](
+        bsdf_measurement("./resources/valid_one.mbsdf"),
+        bsdf_measurement("./resources/valid_two.mbsdf"))
+) = material();

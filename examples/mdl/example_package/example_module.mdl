@@ -1,0 +1,57 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+mdl 1.7;
+
+import ::anno::*;
+import ::df::*;
+import ::state::*;
+import ::tex::*;
+
+export material red(
+    uniform bool enabled = true
+    [[ anno::display_name("Enabled"),
+       anno::description("Enable the red surface") ]],
+    uniform float roughness = 0.2
+    [[ anno::display_name("Roughness"),
+       anno::soft_range(0.0, 1.0),
+       anno::in_group("Surface") ]],
+    uniform int intensity_percent = 100
+    [[ anno::display_name("Intensity"),
+       anno::hard_range(0, 100),
+       anno::in_group("Surface") ]],
+    uniform float3 tint = float3(1.0, 0.0, 0.0)
+    [[ anno::display_name("Tint"),
+       anno::description("Surface color"),
+       anno::in_group("Surface") ]],
+    uniform texture_2d color_texture =
+        texture_2d("./textures/red_checker.png", ::tex::gamma_srgb)
+    [[ anno::display_name("Color Texture"),
+       anno::description("Strict-relative MDL resource path"),
+       anno::in_group("Surface") ]],
+    uniform texture_2d green_texture =
+        texture_2d("/example_package/textures/green_checker.png", ::tex::gamma_srgb)
+    [[ anno::display_name("Green Texture"),
+       anno::description("Absolute MDL resource path"),
+       anno::in_group("Surface") ]],
+    uniform texture_2d blue_texture =
+        texture_2d("textures/blue_checker.png", ::tex::gamma_srgb)
+    [[ anno::display_name("Blue Texture"),
+       anno::description("Weak-relative MDL resource path"),
+       anno::in_group("Surface") ]]
+) = let {
+    float3 uvw = state::texture_coordinate(0);
+    float2 uv = float2(uvw.x, uvw.y);
+    color texture_color =
+        tex::lookup_color(color_texture, uv) * tint.x
+        + tex::lookup_color(green_texture, uv) * tint.y
+        + tex::lookup_color(blue_texture, uv) * tint.z;
+    color surface_color = enabled
+        ? texture_color * (float(intensity_percent) / 100.0)
+        : color(0.0);
+} in material(
+    surface: material_surface(
+        scattering: df::diffuse_reflection_bsdf(
+            tint: surface_color,
+            roughness: roughness)));

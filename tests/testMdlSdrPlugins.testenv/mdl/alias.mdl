@@ -1,0 +1,15 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+typedef int number;
+
+export number test_alias
+(
+    number param = 1234
+)
+{
+    return param;
+}
+

@@ -1,0 +1,26 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+import ::math::*;
+
+export float test_find_overload
+(
+    float a = 0.1,
+
+    int b = 2
+)
+{
+    return a + b;
+}
+
+export float test_find_overload
+(
+    int a = 1,
+
+    float b = 2
+)
+{
+    return a + b;
+}

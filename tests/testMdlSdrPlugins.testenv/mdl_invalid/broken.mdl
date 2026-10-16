@@ -1,0 +1,27 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+// Intentionally invalid MDL fixture for coverage of
+// ModuleLoader.cpp::loadModule's error-reporting loop.
+//
+// This file MUST live under `mdl_invalid/` (sibling to `mdl/`) so the
+// testMdlSdrPlugins / testMdlDiscovery sweeps that walk `mdl/*.mdl`
+// don't try to load it as a healthy module.  It's loaded explicitly by
+// testMdlLifecycle.py::BrokenModuleTests via UsdMdl.AddModuleToRegistry,
+// which expects the load to fail cleanly (empty node list, no crash)
+// while exercising every branch of the SDK error/message dispatch in
+// src/usdMdl/runtime/ModuleLoader.cpp's load_module diagnostic block.
+//
+// Each declaration below trips a distinct SDK diagnostic so the SDK
+// emits multiple ERROR-severity messages with notes attached.
+mdl 1.8;
+
+// 1. Unknown import - triggers C100-class "module not found" error.
+import ::no::such::package::*;
+
+// 2. Reference to an undeclared type - triggers a type-resolution error.
+export not_a_real_type test_undeclared_type(int param = 0) { return param; }
+
+// 3. Syntactically valid signature, semantically broken body
+//    (references a parameter that doesn't exist).
+export int test_bad_body(int param = 0) { return undefined_local_variable; }

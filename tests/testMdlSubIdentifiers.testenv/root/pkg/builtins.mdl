@@ -1,0 +1,66 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+export int builtin(bool value) { return 1; }
+export int builtin(int value) { return 1; }
+export int builtin(float value) { return 1; }
+export int builtin(double value) { return 1; }
+export int builtin(string value) { return 1; }
+export int builtin(color value) { return 1; }
+export int builtin(bool2 value) { return 1; }
+export int builtin(bool3 value) { return 1; }
+export int builtin(bool4 value) { return 1; }
+export int builtin(int2 value) { return 1; }
+export int builtin(int3 value) { return 1; }
+export int builtin(int4 value) { return 1; }
+export int builtin(float2 value) { return 1; }
+export int builtin(float3 value) { return 1; }
+export int builtin(float4 value) { return 1; }
+export int builtin(double2 value) { return 1; }
+export int builtin(double3 value) { return 1; }
+export int builtin(double4 value) { return 1; }
+export int builtin(float2x2 value) { return 1; }
+export int builtin(float2x3 value) { return 1; }
+export int builtin(float2x4 value) { return 1; }
+export int builtin(float3x2 value) { return 1; }
+export int builtin(float3x3 value) { return 1; }
+export int builtin(float3x4 value) { return 1; }
+export int builtin(float4x2 value) { return 1; }
+export int builtin(float4x3 value) { return 1; }
+export int builtin(float4x4 value) { return 1; }
+export int builtin(double2x2 value) { return 1; }
+export int builtin(double2x3 value) { return 1; }
+export int builtin(double2x4 value) { return 1; }
+export int builtin(double3x2 value) { return 1; }
+export int builtin(double3x3 value) { return 1; }
+export int builtin(double3x4 value) { return 1; }
+export int builtin(double4x2 value) { return 1; }
+export int builtin(double4x3 value) { return 1; }
+export int builtin(double4x4 value) { return 1; }
+export int builtin(uniform texture_2d value) { return 1; }
+export int builtin(uniform texture_3d value) { return 1; }
+export int builtin(uniform texture_cube value) { return 1; }
+export int builtin(uniform texture_ptex value) { return 1; }
+export int builtin(uniform light_profile value) { return 1; }
+export int builtin(uniform bsdf_measurement value) { return 1; }
+export bsdf pass_bsdf(bsdf value) = value;
+export hair_bsdf pass_hair_bsdf(hair_bsdf value) = value;
+export edf pass_edf(edf value) = value;
+export vdf pass_vdf(vdf value) = value;
+export material pass_material(material value) = value;
+export material_surface pass_material_surface(material_surface value) = value;
+export material_emission pass_material_emission(material_emission value) = value;
+export material_volume pass_material_volume(material_volume value) = value;
+export material_geometry pass_material_geometry(material_geometry value) = value;
+export int builtin(intensity_mode value) { return 1; }
+export int builtin_array(bool[2] values) { return 2; }
+export int builtin_array(int[2] values) { return 2; }
+export int builtin_array(float[2] values) { return 2; }
+export int builtin_array(double[2] values) { return 2; }
+export int builtin_array(string[2] values) { return 2; }
+export int builtin_array(color[2] values) { return 2; }
+export int builtin_array(float3[2] values) { return 2; }
+export int builtin_array(float2x3[2] values) { return 2; }
+export int builtin_array(uniform texture_2d[2] values) { return 2; }
+export int builtin_array(uniform light_profile[2] values) { return 2; }
+export int builtin_array(uniform bsdf_measurement[2] values) { return 2; }

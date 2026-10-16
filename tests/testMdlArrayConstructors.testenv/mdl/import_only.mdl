@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+using ::array_nodes import Light;
+export float consume(Light value) { return value.intensity; }

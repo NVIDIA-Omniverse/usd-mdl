@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: Apache-2.0
+
+# Force LF line endings on files that Linux toolchains run as scripts
+# or feed into YAML parsers, regardless of the developer's local
+# core.autocrlf setting.  Keeps CI's fetch-mdl-sdk.sh and ci.yml
+# parsers happy when checked out on a Windows clone with the default
+# autocrlf=true.
+*.sh   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+# PowerShell is happy with either, but pin to LF too so the cross-
+# platform fetch script pair stays uniform.
+*.ps1  text eol=lf
+
+# MBSDF fixtures contain binary dimensions and samples.
+*.mbsdf binary
+
+# Keep copied IES profiles normalized to LF.
+*.ies text eol=lf

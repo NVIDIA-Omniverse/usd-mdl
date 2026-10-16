@@ -1,0 +1,26 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+// Use a distinct name: ::math is an SDK standard module, not this fixture.
+
+export float test_add
+(
+    float a = 0.1,
+
+    float b = 0.2
+)
+{
+    return a + b;
+}
+
+export int test_add
+(
+    int a = 1,
+
+    int b = 2
+)
+{
+    return a + b;
+}

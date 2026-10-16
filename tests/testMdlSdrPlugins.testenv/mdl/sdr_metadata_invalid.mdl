@@ -1,0 +1,22 @@
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+mdl 1.8;
+
+annotation SDR__sdrUsdDefinitionType(string value);
+
+export float invalid_type_name(float value = 1.0 [[
+    SDR__sdrUsdDefinitionType("normal3q")
+]]) { return value; }
+
+export float2 incompatible_role(float2 value = float2(1.0) [[
+    SDR__sdrUsdDefinitionType("normal3f")
+]]) { return value; }
+
+export float3 incompatible_array(float3 value = float3(1.0) [[
+    SDR__sdrUsdDefinitionType("float3[]")
+]]) { return value; }
+
+export int incompatible_token(int value = 1 [[
+    SDR__sdrUsdDefinitionType("token")
+]]) { return value; }

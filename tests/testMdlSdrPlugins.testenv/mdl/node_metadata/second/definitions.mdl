@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+
+export float choose(float value = 0.75) = value;

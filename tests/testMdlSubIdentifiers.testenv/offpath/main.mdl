@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: Apache-2.0
+mdl 1.8;
+import .::neighbor::*;
+import ::tex::*;
+export struct Local { int i = 41; };
+export int unique(Local own) { return own.i; }
+export int use(Local own) { return own.i; }
+export int use(neighbor::Thing sibling) { return sibling.i; }
+export int use(tex::wrap_mode library) { return int(library); }
+export int sibling_array(neighbor::Thing[2] a) { return a[0].i; }
+export material paint(Local own = Local()) = material(ior: color(float(own.i)));
